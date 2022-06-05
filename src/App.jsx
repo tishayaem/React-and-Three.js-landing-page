@@ -26,11 +26,12 @@ function Box() {
   );
 }
 
-function App() {
+function App({ count = 50 }) {
   return (
     <Canvas>
-      <Box />
-      <Box />
+      {Array.from({ length: count }, (_, i) => (
+        <Box key={i} z={i} />
+      ))}
     </Canvas>
   );
 }
