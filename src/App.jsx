@@ -1,6 +1,7 @@
 import * as THREE from "three";
-import { useRef, useState } from "react";
+import { useRef, useState, Suspense } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
 
 function Box({ z }) {
   const ref = useRef();
@@ -27,12 +28,19 @@ function Box({ z }) {
   );
 }
 
+function Violin() {
+  const { scene } = useGLTF("/public/violin-v1.glb");
+  return <primitive object={scene} />;
+}
 function App({ count = 50 }) {
   return (
     <Canvas>
-      {Array.from({ length: count }, (_, i) => (
+      <Suspense fallback={null}>
+        <Violin scale={0.1}/>
+      </Suspense>
+      {/* {Array.from({ length: count }, (_, i) => (
         <Box key={i} z={-i} />
-      ))}
+      ))} */}
     </Canvas>
   );
 }
