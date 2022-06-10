@@ -28,15 +28,29 @@ function Box({ z }) {
   );
 }
 
-function Violin() {
-  const { scene } = useGLTF("/public/violin-v1.glb");
-  return <primitive object={scene} />;
+function Violin(props) {
+  const group = useRef();
+  const { nodes, materials } = useGLTF("/violin.glb");
+  return (
+    <group ref={group} {...props} dispose={null}>
+      <group rotation={[-Math.PI / 2, 0, 0]}>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Object_2.geometry}
+          material={materials.Violino_My001}
+          rotation={[-1.7, -0.63, 0.36]}
+        />
+      </group>
+    </group>
+  );
 }
+
 function App({ count = 50 }) {
   return (
     <Canvas>
       <Suspense fallback={null}>
-        <Violin scale={0.1}/>
+        <Violin scale={0.1} />
       </Suspense>
       {/* {Array.from({ length: count }, (_, i) => (
         <Box key={i} z={-i} />
