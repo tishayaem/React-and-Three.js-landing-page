@@ -3,8 +3,9 @@ import { useRef, useState, Suspense } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 
-function Box({ z }) {
+function Violin({ z }) {
   const ref = useRef();
+  const { nodes, materials } = useGLTF("/violin.glb");
   const { viewport, camera } = useThree();
   const { width, height } = viewport.getCurrentViewport(camera, [0, 0, z]);
 
@@ -13,7 +14,7 @@ function Box({ z }) {
     y: THREE.MathUtils.randFloatSpread(height),
   });
   useFrame(() => {
-    ref.current.position.set(data.x * width, (data.y += 0.5), z);
+    ref.current.position.set(data.x * width, (data.y += 0.02), z);
 
     if (data.y > height / 1.5) {
       data.y = -height / 1.5;
@@ -21,40 +22,27 @@ function Box({ z }) {
   });
 
   return (
-    <mesh ref={ref}>
-      <boxGeometry />
-      <meshBasicMaterial color="lime" />
-    </mesh>
+    <mesh
+      ref={ref}
+      castShadow
+      receiveShadow
+      geometry={nodes.Object_2.geometry}
+      material={materials.Violino_My001}
+      material-color="brown"
+      material-emissive="brown"
+    />
   );
 }
 
-function Violin(props) {
-  const group = useRef();
-  const { nodes, materials } = useGLTF("/violin.glb");
-  return (
-    <group ref={group} {...props} dispose={null}>
-      <group rotation={[-Math.PI / 2, 0, 0]}>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Object_2.geometry}
-          material={materials.Violino_My001}
-          rotation={[-1.7, -0.63, 0.36]}
-        />
-      </group>
-    </group>
-  );
-}
 
 function App({ count = 50 }) {
   return (
     <Canvas>
       <Suspense fallback={null}>
-        <Violin scale={0.1} />
+        {Array.from({ length: count }, (_, i) => (
+          <Violin key={i} z={-i} scale={0.01} />
+        ))}
       </Suspense>
-      {/* {Array.from({ length: count }, (_, i) => (
-        <Box key={i} z={-i} />
-      ))} */}
     </Canvas>
   );
 }

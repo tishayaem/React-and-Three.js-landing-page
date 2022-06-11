@@ -11,7 +11,7 @@ export default function Model(props) {
         <mesh
           castShadow
           receiveShadow
-          geometry={nodes.Object_2.geometry}
+          geometry={nodes.Object_2.geometry} 
           material={nodes.Object_2.material}
         />
         <mesh
