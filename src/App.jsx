@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { useRef, useState, Suspense } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
+import { EffectComposer, DepthOfField } from "@react-three/postprocessing";
 
 function Violin({ z }) {
   const ref = useRef();
@@ -34,7 +35,6 @@ function Violin({ z }) {
   );
 }
 
-
 function App({ count = 50 }) {
   return (
     <Canvas>
@@ -42,6 +42,9 @@ function App({ count = 50 }) {
         {Array.from({ length: count }, (_, i) => (
           <Violin key={i} z={-i} scale={0.01} />
         ))}
+        <EffectComposer>
+          <DepthOfField targer={[0, 0, 40]} focalLength={0.3} bokehScale={4} />
+        </EffectComposer>
       </Suspense>
     </Canvas>
   );
